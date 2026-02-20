@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="product-detail">
+        <div class="product-image-container">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% elif product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="product-placeholder-large">No Image Available</div>
+            {% endif %}
+        </div>
+        
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="category-badge">{{ product.category.name }}</p>
+            <p class="sku">SKU: {{ product.sku }}</p>
+            
+            <div class="price-section">
+                <h2 class="price">₹{{ product.price }}</h2>
+            </div>
+            
+            <div class="stock-section">
+                {% if product.in_stock %}
+                    <p class="in-stock">✓ In Stock ({{ product.quantity }} available)</p>
+                    {% if product.is_low_stock %}
+                        <p class="low-stock-warning">⚠ Low Stock!</p>
+                    {% endif %}
+                {% else %}
+                    <p class="out-stock">✗ Out of Stock</p>
+                {% endif %}
+            </div>
+            
+            <div class="description">
+                <h3>Description</h3>
+                <p>{{ product.description }}</p>
+            </div>
+            
+            <div class="supplier-info">
+                <p><strong>Supplier:</strong> {{ product.supplier }}</p>
+            </div>
+            
+            {% if user.is_authenticated and product.in_stock %}
+                <div class="action-buttons">
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-large">Add to Cart</a>
+                </div>
+            {% elif not user.is_authenticated %}
+                <div class="action-buttons">
+                    <a href="{% url 'login' %}" class="btn btn-secondary btn-large">Login to Purchase</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Analytics</h1>
+    
+    <div class="analytics-container">
+        <div class="analytics-section">
+            <h2>Monthly Sales</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Month</th>
+                        <th>Total Sales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in monthly_sales %}
+                    <tr>
+                        <td>{{ sale.month|date:"F Y" }}</td>
+                        <td>₹{{ sale.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="analytics-section">
+            <h2>Top Products</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Units Sold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in top_products %}
+                    <tr>
+                        <td>{{ item.product__name }}</td>
+                        <td>{{ item.total_sold }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="analytics-section">
+            <h2>Orders by Status</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status in orders_by_status %}
+                    <tr>
+                        <td><span class="badge badge-{{ status.order_status|lower }}">{{ status.order_status }}</span></td>
+                        <td>{{ status.count }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

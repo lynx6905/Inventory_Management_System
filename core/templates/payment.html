@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="payment-container">
+        <h1>Complete Payment</h1>
+        <p>Order ID: {{ order.order_id }}</p>
+        <p>Amount: ₹{{ order.total_amount }}</p>
+        
+        <button id="razorpay-button" class="btn btn-primary btn-large">Pay Now</button>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById('razorpay-button').onclick = function(e){
+    e.preventDefault();
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ amount }}",
+        "currency": "INR",
+        "name": "Supermart",
+        "description": "Order Payment",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response){
+            // Submit payment details to backend
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{% url 'payment_callback' %}";
+            
+            var fields = {
+                'razorpay_payment_id': response.razorpay_payment_id,
+                'razorpay_order_id': response.razorpay_order_id,
+                'razorpay_signature': response.razorpay_signature
+            };
+            
+            for(var key in fields) {
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = fields[key];
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        },
+        "prefill": {
+            "name": "{{ user.get_full_name }}",
+            "email": "{{ user.email }}",
+            "contact": "{{ user.phone }}"
+        },
+        "theme": {
+            "color": "#2563eb"
+        }
+    };
+    var rzp = new Razorpay(options);
+    rzp.open();
+}
+</script>
+{% endblock %}

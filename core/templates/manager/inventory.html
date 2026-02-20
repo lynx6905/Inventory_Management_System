@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Management - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Inventory Management</h1>
+    
+    <div class="inventory-container">
+        <div class="add-product-section">
+            <h2>Add New Product</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="add_product" value="1">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.name.label }}</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{{ form.sku.label }}</label>
+                        {{ form.sku }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.category.label }}</label>
+                        {{ form.category }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{{ form.price.label }}</label>
+                        {{ form.price }}
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.quantity.label }}</label>
+                        {{ form.quantity }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{{ form.low_stock_threshold.label }}</label>
+                        {{ form.low_stock_threshold }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.supplier.label }}</label>
+                    {{ form.supplier }}
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.description.label }}</label>
+                    {{ form.description }}
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.image.label }}</label>
+                    {{ form.image }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </div>
+        
+        <div class="products-list-section">
+            <h2>All Products</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.sku }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category.name }}</td>
+                        <td>₹{{ product.price }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>
+                            {% if product.is_low_stock %}
+                                <span class="badge badge-warning">Low Stock</span>
+                            {% elif product.in_stock %}
+                                <span class="badge badge-success">In Stock</span>
+                            {% else %}
+                                <span class="badge badge-danger">Out of Stock</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

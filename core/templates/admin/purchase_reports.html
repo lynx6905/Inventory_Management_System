@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Purchase Reports - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Purchase Reports</h1>
+    
+    <div class="reports-container">
+        <div class="filter-section">
+            <form method="get" class="filter-form">
+                <input type="date" name="start_date" value="{{ request.GET.start_date }}">
+                <input type="date" name="end_date" value="{{ request.GET.end_date }}">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+        
+        <div class="summary-section">
+            <h2>Summary</h2>
+            <div class="stat-card success">
+                <h3>₹{{ total_revenue }}</h3>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+        
+        <div class="orders-section">
+            <h2>Orders</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.created_at|date:"M d, Y" }}</td>
+                        <td>{{ order.user.username }}</td>
+                        <td>₹{{ order.total_amount }}</td>
+                        <td><span class="badge badge-{{ order.payment_status|lower }}">{{ order.payment_status }}</span></td>
+                        <td><span class="badge badge-{{ order.order_status|lower }}">{{ order.order_status }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

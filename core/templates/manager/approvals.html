@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Approvals - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Order Approvals</h1>
+    
+    {% if pending_orders %}
+        <div class="approvals-container">
+            {% for order in pending_orders %}
+            <div class="approval-card">
+                <div class="approval-header">
+                    <h3>Order #{{ order.order_id }}</h3>
+                    <span class="date">{{ order.created_at|date:"M d, Y H:i" }}</span>
+                </div>
+                
+                <div class="approval-details">
+                    <p><strong>Customer:</strong> {{ order.user.get_full_name }}</p>
+                    <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                    <p><strong>Payment Status:</strong> 
+                        <span class="badge badge-{{ order.payment_status|lower }}">{{ order.payment_status }}</span>
+                    </p>
+                </div>
+                
+                <div class="order-items">
+                    <h4>Items:</h4>
+                    <ul>
+                        {% for item in order.items.all %}
+                        <li>{{ item.product.name }} x {{ item.quantity }} - ₹{{ item.subtotal }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="approval-actions">
+                    <form method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+                        <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No pending orders for approval.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

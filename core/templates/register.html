@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2>Register</h2>
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <span class="error">{{ form.email.errors }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>{{ form.first_name.label }}</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}
+                            <span class="error">{{ form.first_name.errors }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}
+                            <span class="error">{{ form.last_name.errors }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.phone.label }}</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <span class="error">{{ form.phone.errors }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.address.label }}</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}
+                        <span class="error">{{ form.address.errors }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.password1.label }}</label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <span class="error">{{ form.password1.errors }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>{{ form.password2.label }}</label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <span class="error">{{ form.password2.errors }}</span>
+                    {% endif %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+            </form>
+            
+            <p class="auth-footer">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

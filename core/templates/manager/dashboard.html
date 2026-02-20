@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Manager Dashboard - Supermart{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard">
+        <h1>Manager Dashboard</h1>
+        <p>Welcome, {{ user.get_full_name }}!</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ total_products }}</h3>
+                <p>Total Products</p>
+            </div>
+            
+            <div class="stat-card alert">
+                <h3>{{ low_stock_count }}</h3>
+                <p>Low Stock Items</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>{{ pending_orders }}</h3>
+                <p>Pending Orders</p>
+            </div>
+            
+            <div class="stat-card success">
+                <h3>₹{{ total_revenue }}</h3>
+                <p>Total Revenue</p>
+            </div>
+        </div>
+        
+        <div class="dashboard-actions">
+            <a href="{% url 'manager_inventory' %}" class="btn btn-primary">Manage Inventory</a>
+            <a href="{% url 'manager_approvals' %}" class="btn btn-secondary">Approve Orders</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
